@@ -1,0 +1,81 @@
+In [1]: from firstRESTapi.serializers import tweetSerialize
+
+In [2]: from firstRESTapi.models import tweet
+
+In [3]: obj=tweet.objects.first()
+
+In [4]: obj
+Out[4]: <tweet: Yeah this is my First Tweet ever in this platform.>
+
+In [5]: jsondata=tweetSerialize(obj)
+
+In [6]: jsondata
+Out[6]:
+tweetSerialize(<tweet: Yeah this is my First Tweet ever in this platform.>):
+    Title = CharField(allow_blank=True, allow_null=True, max_length=120, required=False)
+    content = CharField(allow_blank=True, allow_null=True, required=False, style={'base_template': 'textarea.html'})
+    image = ImageField(allow_null=True, max_length=100, required=False)
+
+In [7]: jsondata.data
+Out[7]: {'Title': 'My First Tweet', 'content': 'Yeah this is my First Tweet ever in this platform.', 'image': None}
+
+In [8]: type(jsondata.data)
+Out[8]: rest_framework.utils.serializer_helpers.ReturnDict
+
+In [9]: maindata=jsondata.data
+
+In [10]: maindata
+Out[10]: {'Title': 'My First Tweet', 'content': 'Yeah this is my First Tweet ever in this platform.', 'image': None}
+
+In [11]: maindata[Title]
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-11-ffb848978b0b> in <module>
+----> 1 maindata[Title]
+
+NameError: name 'Title' is not defined
+
+In [12]: maindata['Title']
+Out[12]: 'My First Tweet'
+
+In [13]: from rest_framework.renderers import JSONRenderer
+
+In [14]: mainjson=JSONRenderer().render(maindata)
+
+In [15]: mainjson
+Out[15]: b'{"Title":"My First Tweet","content":"Yeah this is my First Tweet ever in this platform.","image":null}'
+
+In [16]: type(mainjson)
+Out[16]: bytes
+
+In [17]: type(maindata)
+Out[17]: rest_framework.utils.serializer_helpers.ReturnDict
+
+In [18]: import io
+    ...: from rest_framework.parsers import JSONParser
+
+In [19]: dt=io.BytesIO(mainjson)
+
+In [20]: dt
+Out[20]: <_io.BytesIO at 0x88c420>
+
+In [21]: data=JSONParser.parse(dt)
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-21-e441b784e0c7> in <module>
+----> 1 data=JSONParser.parse(dt)
+
+TypeError: parse() missing 1 required positional argument: 'stream'
+
+In [22]: data=JSONParser().parse(dt)
+
+In [23]: data
+Out[23]:
+{'Title': 'My First Tweet',
+ 'content': 'Yeah this is my First Tweet ever in this platform.',
+ 'image': None}
+
+In [24]: type(data)
+Out[24]: dict
+
+In [25]:        

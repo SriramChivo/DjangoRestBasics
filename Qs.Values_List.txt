@@ -1,0 +1,81 @@
+
+In [1]: from firstRESTapi.models import tweet
+
+In [3]: l=tweet.objects.all().values_list("Title",flat=True)
+
+In [4]: l
+Out[4]: <QuerySet ['It is Custom Called update', 'Second Tweet', 'Its My Fourth Tweet', 'it shouldnot create new', 'This json is created via listcreateView', 'this is created using api mixins', 'Title From the Post requests Changed using Patch']>
+
+In [5]: list(l)
+Out[5]:
+['It is Custom Called update',
+ 'Second Tweet',
+ 'Its My Fourth Tweet',
+ 'it shouldnot create new',
+ 'This json is created via listcreateView',
+ 'this is created using api mixins',
+ 'Title From the Post requests Changed using Patch']
+
+In [6]: l[0]
+Out[6]: 'It is Custom Called update'
+
+-------------------------------------------------------------------------
+                          Normal-Lazy-Method 
+-------------------------------------------------------------------------
+
+In [8]: getall=tweet.objects.all()
+
+In [9]: getall
+Out[9]: <QuerySet [<tweet: It is Custom Called updates>, <tweet: Yeah Second Tweet from myself its cool>, <tweet: Is he is your husband>, <tweet: thh>, <tweet: No file chosen>, <tweet: sdfgh>, <tweet: This Content is Changed using put>]>
+
+In [10]: li=[l.Title for l in getall]
+
+In [11]: li
+Out[11]:
+['It is Custom Called update',
+ 'Second Tweet',
+ 'Its My Fourth Tweet',
+ 'it shouldnot create new',
+ 'This json is created via listcreateView',
+ 'this is created using api mixins',
+ 'Title From the Post requests Changed using Patch']
+
+-----------------------------------------------------------------------------
+                           Values Vs Values_list()
+-----------------------------------------------------------------------------
+
+Summary :
+
+Values_List(one field , flat=True) one field with flat true it will give aslist instead tuples
+
+values() will always give result as dictionary to access you need to use keys and values or dict.items()
+
+
+In [2]: l=tweet.objects.all().values_list("Title")
+
+In [3]: l
+Out[3]: <QuerySet [('It is Custom Called update',), ('Second Tweet',), ('Its My Fourth Tweet',), ('it shouldnot create new',), ('This json is created via listcreateView',), ('this is created using api mixins',), ('Title From the Post requests Changed using Patch',)]>
+
+In [4]: s=l.first()
+
+In [5]: s
+Out[5]: ('It is Custom Called update',)
+
+In [6]: s.Title #only it will give values cant access their objects
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-6-9797039611b7> in <module>
+----> 1 s.Title
+
+AttributeError: 'tuple' object has no attribute 'Title'
+
+In [7]: l=tweet.objects.all().values_list()
+
+In [8]: l
+Out[8]: <QuerySet [(1, 1, 'It is Custom Called update', 'It is Custom Called updates', '', datetime.datetime(2020, 7, 1, 5, 59, 15, 850008, tzinfo=<UTC>), datetime.datetime(2020, 7, 3, 18, 28, 37, 729707, tzinfo=<UTC>)), (2, 1, 'Second Tweet', 'Yeah Second Tweet from myself its cool', '', datetime.datetime(2020, 7, 1, 6, 3, 14, 610410, tzinfo=<UTC>), datetime.datetime(2020, 7, 1, 6, 3, 14, 610410, tzinfo=<UTC>)), (4, 1, 'Its My Fourth Tweet', 'Is he is your husband', '', datetime.datetime(2020, 7, 2, 18, 19, 5, 791431, tzinfo=<UTC>), datetime.datetime(2020, 7, 2, 18, 19, 5, 791431, tzinfo=<UTC>)), (6, 1, 'it shouldnot create new', 'thh', '', datetime.datetime(2020, 7, 3, 18, 35, 50, 473086, tzinfo=<UTC>), datetime.datetime(2020, 7, 3, 18, 35, 50, 473086, tzinfo=<UTC>)), (7, 1, 'This json is created via listcreateView', 'No file chosen', '', datetime.datetime(2020, 7, 3, 20, 1, 10, 165210, tzinfo=<UTC>), datetime.datetime(2020, 7, 3, 20, 1, 10, 165210, tzinfo=<UTC>)), (8, 1, 'this is created using api mixins', 'sdfgh', '', datetime.datetime(2020, 7, 3, 20, 33, 44, 883246, tzinfo=<UTC>), datetime.datetime(2020, 7, 3, 20, 33, 44, 883246, tzinfo=<UTC>)), (10, 1, 'Title From the Post requests Changed using Patch', 'This Content is Changed using put', '', datetime.datetime(2020, 7, 4, 15, 42, 35, 959077, tzinfo=<UTC>), datetime.datetime(2020, 7, 4, 15, 56, 1, 492948, tzinfo=<UTC>))]>
+
+In [9]: tweet.objects.values()
+Out[9]: <QuerySet [{'id': 1, 'User_id': 1, 'Title': 'It is Custom Called update', 'content': 'It is Custom Called updates', 'image': '', 'date_created': datetime.datetime(2020, 7, 1, 5, 59, 15, 850008, tzinfo=<UTC>), 'updatedTime': datetime.datetime(2020, 7, 3, 18, 28, 37, 729707, tzinfo=<UTC>)}, {'id': 2, 'User_id': 1, 'Title': 'Second Tweet', 'content': 'Yeah Second Tweet from myself its cool', 'image': '', 'date_created': datetime.datetime(2020, 7, 1, 6, 3, 14, 610410, tzinfo=<UTC>), 'updatedTime': datetime.datetime(2020, 7, 1, 6, 3, 14, 610410, tzinfo=<UTC>)}, {'id': 4, 'User_id': 1, 'Title': 'Its My Fourth Tweet', 'content': 'Is he is your husband', 'image': '', 'date_created': datetime.datetime(2020, 7, 2, 18, 19, 5, 791431, tzinfo=<UTC>), 'updatedTime': datetime.datetime(2020, 7, 2, 18, 19, 5, 791431, tzinfo=<UTC>)}, {'id': 6, 'User_id': 1, 'Title': 'it shouldnot create new', 'content': 'thh', 'image': '', 'date_created': datetime.datetime(2020, 7, 3, 18, 35, 50, 473086, tzinfo=<UTC>), 'updatedTime': datetime.datetime(2020, 7, 3, 18, 35, 50, 473086, tzinfo=<UTC>)}, {'id': 7, 'User_id': 1, 'Title': 'This json is created via listcreateView', 'content': 'No file chosen', 'image': '', 'date_created': datetime.datetime(2020, 7, 3, 20, 1, 10, 165210, tzinfo=<UTC>), 'updatedTime': datetime.datetime(2020, 7, 3, 20, 1, 10, 165210, tzinfo=<UTC>)}, {'id': 8, 'User_id': 1, 'Title': 'this is created using api mixins', 'content': 'sdfgh', 'image': '', 'date_created': datetime.datetime(2020, 7, 3, 20, 33, 44, 883246, tzinfo=<UTC>), 'updatedTime': datetime.datetime(2020, 7, 3, 20, 33, 44, 883246, tzinfo=<UTC>)}, {'id': 10, 'User_id': 1, 'Title': 'Title From the Post requests Changed using Patch', 'content': 'This Content is Changed using put', 'image': '', 'date_created': datetime.datetime(2020, 7, 4, 15, 42, 35, 959077, tzinfo=<UTC>), 'updatedTime': datetime.datetime(2020, 7, 4, 15, 56, 1, 492948, tzinfo=<UTC>)}]>
+
+In [10]: tweet.objects.values("Title")
+Out[10]: <QuerySet [{'Title': 'It is Custom Called update'}, {'Title': 'Second Tweet'}, {'Title': 'Its My Fourth Tweet'}, {'Title': 'it shouldnot create new'}, {'Title': 'This json is created via listcreateView'}, {'Title': 'this is created using api mixins'}, {'Title': 'Title From the Post requests Changed using Patch'}]>
